@@ -1,21 +1,28 @@
 import {createStore} from 'redux';
-
-const reducer = (state = 0, action) => {
-
-  switch(action.type){
-    case 'INC':
-      return state +1;
-    case 'DEC':
-      return state - 1;
-    default:
-     return state;
-  }
-}
+import reducer from './reducer';
+import {inc, dec, rnd} from './createActions';
 
 const store = createStore(reducer);
-store.subscribe(()=> {
-  console.log(store.getState());
-});
+const {dispatch} = store;
 
-store.dispatch({type: 'INC'})
-store.dispatch({type: 'DEC'})
+
+
+document.querySelector('#inc').addEventListener('click', ()=>{
+  dispatch(inc());
+
+})
+
+document.querySelector('#dec').addEventListener('click', ()=>{
+  dispatch(dec());
+})
+
+document.querySelector('#rnd').addEventListener('click', ()=>{
+  const payload = Math.floor(Math.random() * 10 + 1);
+  dispatch(rnd(payload));
+})
+
+const update = () => {
+  document.querySelector('#counter').textContent = store.getState();
+}
+
+store.subscribe(update);
